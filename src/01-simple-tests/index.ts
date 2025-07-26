@@ -53,5 +53,3 @@ const isInputValid = (
 
   return actionValid && argumentsValid;
 };
-
-console.log(simpleCalculator({ a: 5, action: "*", b: 3 }))
