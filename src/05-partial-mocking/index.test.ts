@@ -5,9 +5,9 @@ jest.mock('./index', () => {
   return {
     __esModule: true,
     ...originalModule,
-    mockOne: () => { },
-    mockTwo: () => { },
-    mockThree: () => { },
+    mockOne: jest.fn(),
+    mockTwo: jest.fn(),
+    mockThree: jest.fn(),
   };
 });
 
@@ -22,7 +22,6 @@ describe('partial mocking', () => {
     mockTwo()
     mockThree()
     expect(consoleSpy).toHaveBeenCalledTimes(0)
-    expect(consoleSpy).not.toHaveBeenCalledWith('I am not mocked')
     consoleSpy.mockRestore()
   });
 

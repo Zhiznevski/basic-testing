@@ -44,34 +44,24 @@ describe('BankAccount', () => {
 
   test('fetchBalance should return number in case if request did not failed', async () => {
     const myBankAccount = getBankAccount(10);
-    try {
-      const balance = await myBankAccount.fetchBalance()
-      if (balance) {
-        expect(typeof balance).toBe('number');
-      }
-    } catch (err) {
-      console.error(err);
-    }
+    jest.spyOn(myBankAccount, "fetchBalance").mockResolvedValueOnce(12)
+    const balance = await myBankAccount.fetchBalance()
+    expect(typeof balance).toBe('number');
+    expect(balance).toBe(12);
   });
 
   test('should set new balance if fetchBalance returned number', async () => {
     const myBankAccount = getBankAccount(10);
+    jest.spyOn(myBankAccount, "fetchBalance").mockResolvedValueOnce(12)
     const startBalance = myBankAccount.getBalance();
-    try {
-      await myBankAccount.synchronizeBalance();
-      const newBalance = myBankAccount.getBalance()
-      expect(newBalance !== startBalance).toBe(true)
-    } catch (err) {
-      expect(err).toBeInstanceOf(SynchronizationFailedError)
-    }
+    await myBankAccount.synchronizeBalance();
+    const newBalance = myBankAccount.getBalance()
+    expect(newBalance !== startBalance).toBe(true)
   });
 
   test('should throw SynchronizationFailedError if fetchBalance returned null', async () => {
     const myBankAccount = getBankAccount(10);
-    try {
-      await myBankAccount.synchronizeBalance();
-    } catch (err) {
-      expect(err).toBeInstanceOf(SynchronizationFailedError)
-    }
+    jest.spyOn(myBankAccount, "fetchBalance").mockResolvedValueOnce(null)
+    await expect(myBankAccount.synchronizeBalance()).rejects.toThrow(new SynchronizationFailedError)
   });
 });

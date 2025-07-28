@@ -27,12 +27,6 @@ describe('throwCustomError', () => {
 describe('rejectCustomError', () => {
   test('should reject custom error', async () => {
     const error = new MyAwesomeError();
-    console.log(error.message)
-    try {
-      await rejectCustomError()
-
-    } catch (err) {
-      if (err instanceof MyAwesomeError) expect(err.message).toBe(error.message)
-    }
+    await expect(rejectCustomError()).rejects.toThrow(error)
   });
 });
